@@ -19,6 +19,8 @@ resource "aws_subnet" "public_subnets" {
   tags = {
     Name = "Public Subnet ${count.index + 1}"
   }
+
+  depends_on = [aws_vpc.wordpress_vpc]
 }
 
 resource "aws_subnet" "private_subnets" {
@@ -30,6 +32,8 @@ resource "aws_subnet" "private_subnets" {
   tags = {
     Name = "Private Subnet ${count.index + 1}"
   }
+
+  depends_on = [aws_vpc.wordpress_vpc]
 }
 
 # Internet Gateway
@@ -39,9 +43,7 @@ resource "aws_internet_gateway" "wordpress_igw" {
   tags = {
     Name = "WordPress IGW"
   }
-  depends_on = [
-    aws_vpc.wordpress_vpc
-  ]
+  depends_on = [aws_vpc.wordpress_vpc]
 }
 
 # Route Tables

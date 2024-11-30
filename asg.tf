@@ -58,13 +58,21 @@ resource "aws_autoscaling_group" "wordpress_asg" {
     propagate_at_launch = true
   }
 
-  depends_on = [aws_internet_gateway.wordpress_igw]
+  depends_on = [
+    aws_internet_gateway.wordpress_igw,
+    aws_launch_template.wordpress_launch_template
+  ]
 }
 
 # Attach asg with target group for load balancer
 resource "aws_autoscaling_attachment" "asg_alb_attachment" {
   autoscaling_group_name = aws_autoscaling_group.wordpress_asg.name
   lb_target_group_arn    = aws_lb_target_group.wordpress_tg.arn
+
+  depends_on = [
+    aws_autoscaling_group.wordpress_asg,
+    aws_lb_target_group.wordpress_tg
+  ]
 }
 
 # Instance refresh after changing the launch templates

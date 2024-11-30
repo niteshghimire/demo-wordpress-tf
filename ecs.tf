@@ -29,12 +29,16 @@ resource "aws_ecs_capacity_provider" "wordpress_capacity_provider" {
     }
     managed_termination_protection = "DISABLED"
   }
+  depends_on = [
+    aws_autoscaling_group.wordpress_asg,
+    aws_ecs_cluster.wordpress_cluster
+  ]
+
 }
 
 # Cluster Capacity Provider Strategy
 resource "aws_ecs_cluster_capacity_providers" "wordpress_cluster_providers" {
-  cluster_name = aws_ecs_cluster.wordpress_cluster.name
-
+  cluster_name       = aws_ecs_cluster.wordpress_cluster.name
   capacity_providers = [aws_ecs_capacity_provider.wordpress_capacity_provider.name]
 
   default_capacity_provider_strategy {
@@ -42,4 +46,10 @@ resource "aws_ecs_cluster_capacity_providers" "wordpress_cluster_providers" {
     weight            = 100
     capacity_provider = aws_ecs_capacity_provider.wordpress_capacity_provider.name
   }
+
+  depends_on = [
+    aws_ecs_cluster.wordpress_cluster,
+    aws_ecs_capacity_provider.wordpress_capacity_provider
+  ]
 }
+

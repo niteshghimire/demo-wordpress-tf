@@ -61,10 +61,9 @@ resource "aws_ecs_service" "wordpress_service" {
 
   # Ensure load balancer and capacity provider are ready
   depends_on = [
-    aws_lb_listener.wordpress_listener,
-    aws_ecs_cluster_capacity_providers.wordpress_cluster_providers,
+    aws_ecs_cluster.wordpress_cluster,
     aws_ecs_task_definition.wordpress_task,
-    aws_lb.wordpress_alb
+    aws_lb_target_group.wordpress_tg
   ]
 
   # Enable rolling updates

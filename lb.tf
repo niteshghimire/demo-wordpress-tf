@@ -32,6 +32,8 @@ resource "aws_lb_target_group" "wordpress_tg" {
   tags = {
     Name = "WordPress Target Group"
   }
+
+  depends_on = [aws_vpc.wordpress_vpc]
 }
 
 resource "aws_lb_listener" "wordpress_listener" {
@@ -47,4 +49,8 @@ resource "aws_lb_listener" "wordpress_listener" {
   tags = {
     Name = "WordPress ALB Listener"
   }
+  depends_on = [
+    aws_lb_target_group.wordpress_tg,
+    aws_lb.wordpress_alb
+  ]
 }
