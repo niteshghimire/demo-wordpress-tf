@@ -1,5 +1,3 @@
-
-
 resource "aws_key_pair" "bastion_key" {
   key_name   = var.ssh_key_name
   public_key = var.my_public_key
@@ -12,8 +10,7 @@ resource "aws_instance" "bastion" {
   subnet_id                   = aws_subnet.public_subnets[0].id
   key_name                    = aws_key_pair.bastion_key.key_name
   associate_public_ip_address = true
-
-  security_groups = [aws_security_group.wordpress_ec2_sg.id]
+  vpc_security_group_ids      = [aws_security_group.wordpress_ec2_sg.id]
 
   tags = {
     Name = "Bastion-Instance"
